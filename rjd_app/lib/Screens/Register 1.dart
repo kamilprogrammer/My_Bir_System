@@ -353,7 +353,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           context,
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             child: RegisterScreen2(
                                 name_controller: name_controller.text,
                                 floor_controller: floor_count),

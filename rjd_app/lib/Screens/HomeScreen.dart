@@ -131,7 +131,8 @@ class _HomescreenState extends State<Homescreen> {
                                         context,
                                         PageTransition(
                                           type: PageTransitionType.bottomToTop,
-                                          duration: Duration(milliseconds: 300),
+                                          duration:
+                                              const Duration(milliseconds: 300),
                                           child: Full_Admin_Card(
                                             card: report,
                                             index: index,
@@ -182,12 +183,12 @@ class _HomescreenState extends State<Homescreen> {
             ));
   }
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   Future<void> fetch_rep_user() async {
     print(user_id.value);
     try {
-      final url =
-          Uri.parse("http://192.168.0.100:3666/reports/${user_id.value}");
+      final ip_address = url_api.value;
+      final url = Uri.parse("http://$ip_address:3666/reports/${user_id.value}");
       final token = await storage.read(key: "jwt");
       print(token);
 

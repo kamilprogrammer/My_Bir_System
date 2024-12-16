@@ -23,10 +23,10 @@ class StatusCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenWidth * 0.01),
       child: Container(
-        padding: EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Color.fromARGB(70, 50, 55, 81),
+          color: const Color.fromARGB(70, 50, 55, 81),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -81,9 +81,9 @@ class StatusCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(top: 4),
+                        margin: const EdgeInsets.only(top: 4),
                         child: Text(
-                          "$title",
+                          title,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontFamily: "font1",
@@ -107,7 +107,7 @@ class StatusCard extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(bottom: 10),
+          margin: const EdgeInsets.only(bottom: 10),
           width: 40,
           height: 40,
           decoration: ShapeDecoration(

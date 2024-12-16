@@ -23,10 +23,10 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   Future<void> about() async {
-    final storage = FlutterSecureStorage();
+    final storage = const FlutterSecureStorage();
     final token = await storage.read(key: "jwt");
-    final response = await http.get(
-        Uri.parse("http://192.168.0.100:3666/about"),
+    final ip_address = url_api.value;
+    final response = await http.get(Uri.parse("http://$ip_address:3666/about"),
         headers: {"Authorization": "$token"});
     final body = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -38,6 +38,7 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   String about_data = "No Data";
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -150,11 +151,11 @@ class _AboutScreenState extends State<AboutScreen> {
                 height: 20,
               ),
               SafeArea(
-                  child: Container(
+                  child: SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
                 child: Text(about_data.toString(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontFamily: "font1",

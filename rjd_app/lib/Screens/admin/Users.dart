@@ -9,7 +9,6 @@ import 'package:rjd_app/Screens/widgets/false.dart';
 import 'package:rjd_app/Screens/widgets/true.dart';
 import 'package:http/http.dart' as http;
 import 'package:rjd_app/main.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 
 class Users extends StatefulWidget {
   const Users({super.key});
@@ -95,7 +94,8 @@ class _UsersState extends State<Users> {
                                   itemCount: users.length,
                                   itemBuilder: (context, index) {
                                     final user = users[index];
-                                    final storage = FlutterSecureStorage();
+                                    final storage =
+                                        const FlutterSecureStorage();
 
                                     Future Update_worker(
                                         int status, String worker) async {
@@ -130,9 +130,10 @@ class _UsersState extends State<Users> {
                                           final updatedUser = users[status];
 
                                           final realIndex = updatedUser['id'];
+                                          final ip_address = url_api.value;
                                           final req = await http.put(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/worker/$realIndex"),
+                                                  "http://$ip_address:3666/worker/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
@@ -199,16 +200,17 @@ class _UsersState extends State<Users> {
                                         } else {
                                           final updatedUser = users[status];
                                           print("asas");
+                                          final ip_address = url_api.value;
                                           final realIndex = updatedUser['id'];
                                           final req = await http.put(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/not_worker/$realIndex"),
+                                                  "http://$ip_address:3666/not_worker/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
                                           final req2 = await http.put(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/not_admin/$realIndex"),
+                                                  "http://$ip_address:3666/not_admin/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
@@ -312,9 +314,10 @@ class _UsersState extends State<Users> {
                                           final updatedUser = users[status];
                                           print("asas");
                                           final realIndex = updatedUser['id'];
+                                          final ip_address = url_api.value;
                                           final req = await http.put(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/admin/$realIndex"),
+                                                  "http://$ip_address:3666/admin/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
@@ -382,15 +385,16 @@ class _UsersState extends State<Users> {
                                           final updatedUser = users[status];
 
                                           final realIndex = updatedUser['id'];
+                                          final ip_address = url_api.value;
                                           final req = await http.put(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/not_admin/$realIndex"),
+                                                  "http://$ip_address:3666/not_admin/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
                                           final req2 = await http.put(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/not_worker/$realIndex"),
+                                                  "http://$ip_address:3666/not_worker/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
@@ -461,11 +465,12 @@ class _UsersState extends State<Users> {
                                     }
 
                                     Delete(int status) async {
+                                      final ip_address = url_api.value;
                                       final token =
                                           await storage.read(key: "jwt");
                                       final response = await http.post(
                                           Uri.parse(
-                                              "http://192.168.0.100:3666/user/${user_id.value}"),
+                                              "http://$ip_address:3666/user/${user_id.value}"),
                                           headers: {"Authorization": "$token"});
 
                                       if (response.statusCode == 200) {
@@ -505,7 +510,7 @@ class _UsersState extends State<Users> {
                                           final realIndex = updatedReport['id'];
                                           final req = await http.delete(
                                               Uri.parse(
-                                                  "http://192.168.0.100:3666/del_user/$realIndex"),
+                                                  "http://$ip_address:3666/del_user/$realIndex"),
                                               headers: {
                                                 "Authorization": "$token"
                                               });
@@ -570,18 +575,18 @@ class _UsersState extends State<Users> {
                                         height: 70,
                                         margin: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
-                                            color: user['admin'] == true
-                                                ? const Color(0xFF2B3185)
-                                                : Colors.teal,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border:
-                                                user['username'] == name.value
-                                                    ? Border.all(
-                                                        width: 2,
-                                                        color: Colors.white,
-                                                      )
-                                                    : Border.all(width: 0)),
+                                          color: user['admin'] == true
+                                              ? const Color(0xFF2B3185)
+                                              : Colors.teal,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: user['username'] == name.value
+                                              ? Border.all(
+                                                  width: 2,
+                                                  color: Colors.white,
+                                                )
+                                              : Border.all(width: 0),
+                                        ),
                                         child: TextButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -618,7 +623,7 @@ class _UsersState extends State<Users> {
                                                       section: user['section']),
                                                   type: PageTransitionType
                                                       .rightToLeftWithFade,
-                                                  duration: Duration(
+                                                  duration: const Duration(
                                                       milliseconds: 300),
                                                 ));
                                           },
@@ -817,10 +822,11 @@ class _UsersState extends State<Users> {
           );
   }
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   Future<void> fetchUsers() async {
+    final ip_address = url_api.value;
     try {
-      final url = Uri.parse("http://192.168.0.100:3666/users");
+      final url = Uri.parse("http://$ip_address:3666/users");
       final token = await storage.read(key: "jwt");
       final response =
           await http.get(url, headers: {"Authorization": "$token"});

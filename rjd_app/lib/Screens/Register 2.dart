@@ -1,13 +1,10 @@
 import 'dart:convert';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:rjd_app/Screens/widgets/false.dart';
 import 'package:rjd_app/main.dart';
 import 'package:http/http.dart' as http;
-import 'package:encrypt/encrypt.dart' as encrypt;
 
 class RegisterScreen2 extends StatefulWidget {
   const RegisterScreen2({
@@ -40,7 +37,6 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
   @override
   Widget build(BuildContext context) {
     final formSearchProductsKey = GlobalKey<FormState>();
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     return PopScope(
       canPop: false,
       child: MaterialApp(
@@ -464,9 +460,9 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
   }
 
   Future<void> fetching_sections() async {
-    print("here");
+    final ip_address = url_api.value;
     final request = await http.get(Uri.parse(
-        "http://192.168.0.100:3666/sections/${widget.floor_controller.toString()}"));
+        "http://$ip_address:3666/sections/${widget.floor_controller.toString()}"));
     if (request.statusCode == 200) {
       List<dynamic> list1 = jsonDecode(utf8.decode(request.bodyBytes));
       print(list1);
@@ -491,9 +487,10 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
         section_count != "0" &&
         pass_controller.text.length > 7) {
       final password = pass_controller.text;
-
+      final ip_address = url_api.value;
+      print(ip_address);
       final response = await http.post(
-        Uri.parse("http://192.168.0.100:3666/register"),
+        Uri.parse("http://$ip_address:3666/register"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Access-Control-Allow-Origin": "*",
@@ -539,7 +536,7 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
         worker.value = result['worker'].toString();
 
         final secret = jsonDecode(response.body)[1] as Map<String, dynamic>;
-        final storage = FlutterSecureStorage();
+        final storage = const FlutterSecureStorage();
         final token =
             await storage.write(key: "jwt", value: secret['access_token']);
 
@@ -547,7 +544,7 @@ class _RegisterScreen2State extends State<RegisterScreen2> {
             context,
             PageTransition(
                 type: PageTransitionType.bottomToTop,
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 child: const MyApp()));
       } else {
         showDialog(

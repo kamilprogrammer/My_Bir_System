@@ -94,7 +94,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     ),
                   ],
                 )
-                    .animate(delay: const Duration(microseconds: 50))
+                    .animate(delay: const Duration(milliseconds: 50))
                     .fade()
                     .slide(),
                 const SizedBox(
@@ -168,7 +168,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     ),
                   ],
                 )
-                    .animate(delay: const Duration(microseconds: 400))
+                    .animate(delay: const Duration(milliseconds: 400))
                     .fade()
                     .slide(),
                 const SizedBox(
@@ -424,13 +424,14 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   Future<void> SendReport() async {
-    final storage = FlutterSecureStorage();
+    final ip_address = url_api.value;
+    final storage = const FlutterSecureStorage();
     final token = await storage.read(key: "jwt");
     if (notes_controller.text.isNotEmpty &&
         desc_controller.text.isNotEmpty &&
         place_controller.text.isNotEmpty) {
       final response = await http.post(
-        Uri.parse("http://192.168.0.100:3666/add"),
+        Uri.parse("http://$ip_address:3666/add"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "$token"

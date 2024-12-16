@@ -117,14 +117,14 @@ class _MyDrawerState extends State<MyDrawer> {
                           context,
                           PageTransition(
                               type: PageTransitionType.rightToLeft,
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               child: const Adminhomescreen()));
                     } else {
                       Navigator.push(
                           context,
                           PageTransition(
                               type: PageTransitionType.rightToLeft,
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               child: const Homescreen()));
                     }
 
@@ -149,55 +149,60 @@ class _MyDrawerState extends State<MyDrawer> {
                               context,
                               PageTransition(
                                   type: PageTransitionType.rightToLeft,
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   child: const ReportScreen()));
                           // Handle tap
                         },
                       )
-                    : ListTile(
-                        leading: const Icon(Icons.dashboard_rounded),
-                        title: Container(
-                          margin: const EdgeInsets.only(bottom: 6),
-                          child: const Text(
-                            'الاحصائيات',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'font1',
+                    : Column(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.dashboard_rounded),
+                            title: Container(
+                              margin: const EdgeInsets.only(bottom: 6),
+                              child: const Text(
+                                'الاحصائيات',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'font1',
+                                ),
+                              ),
                             ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      child: const StatsScreen()));
+                              // Handle tap
+                            },
                           ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  duration: Duration(milliseconds: 300),
-                                  child: StatsScreen()));
-                          // Handle tap
-                        },
+                          ListTile(
+                            leading: const Icon(Icons.person),
+                            title: Container(
+                              margin: const EdgeInsets.only(bottom: 6),
+                              child: const Text(
+                                'جميع الحسابات',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'font1',
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      child: const Users()));
+                            },
+                          ),
+                        ],
                       ),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: Container(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    child: const Text(
-                      'جميع الحسابات',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'font1',
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            duration: Duration(milliseconds: 300),
-                            child: const Users()));
-                    // Handle tap
-                  },
-                ),
                 ListTile(
                   leading: const Icon(Icons.info),
                   title: Container(
@@ -215,7 +220,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         context,
                         PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             child: const AboutScreen()));
                     // Handle tap
                   },
@@ -243,13 +248,13 @@ class _MyDrawerState extends State<MyDrawer> {
                     section.value = '0';
                     floor.value = '0';
                     admin1.value = '0';
-                    final storage = FlutterSecureStorage();
+                    final storage = const FlutterSecureStorage();
                     final token = await storage.deleteAll();
                     Navigator.push(
                         context,
                         PageTransition(
                             type: PageTransitionType.topToBottom,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             child: const Starter()));
                     // Handle tap
                   },

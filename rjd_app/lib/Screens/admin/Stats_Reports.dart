@@ -2,20 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:rjd_app/Screens/admin/Stats_Reports.dart';
 import 'package:rjd_app/Screens/widgets/Drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:rjd_app/main.dart';
 
-class StatsScreen extends StatefulWidget {
-  const StatsScreen({super.key});
+class StatsReport extends StatefulWidget {
+  const StatsReport({super.key});
 
   @override
-  State<StatsScreen> createState() => _StatsScreenState();
+  State<StatsReport> createState() => _StatsReportState();
 }
 
-class _StatsScreenState extends State<StatsScreen> {
+class _StatsReportState extends State<StatsReport> {
   int option = 0;
   List users = [];
   String reports = "";
@@ -32,20 +30,6 @@ class _StatsScreenState extends State<StatsScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          onPressed: () {
-            Navigator.push(
-                context,
-                PageTransition(
-                    child: const StatsReport(),
-                    type: PageTransitionType.rightToLeft));
-          },
-          child: const Icon(
-            Icons.double_arrow_sharp,
-            color: Color(0xFF35394D),
-          ),
-        ),
         drawer: const MyDrawer(),
         appBar: AppBar(
           toolbarHeight: 50.0,
@@ -91,15 +75,15 @@ class _StatsScreenState extends State<StatsScreen> {
                 children: [
                   const SizedBox(height: 20), // Top padding
                   // Tabs (اليوم and الشهر)
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      /*Container(
-                        padding: EdgeInsets.only(
+                      Container(
+                        padding: const EdgeInsets.only(
                             right: 8, left: 8, top: 4, bottom: 4),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(19),
-                            color: Color(0x7F35394D)),
+                            color: const Color(0x7F35394D)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -118,11 +102,11 @@ class _StatsScreenState extends State<StatsScreen> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             right: 8, left: 8, top: 4, bottom: 4),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(19),
-                            color: Color(0xFF35394D)),
+                            color: const Color(0xFF35394D)),
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -138,7 +122,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                 fontFamily: "font1"),
                           ),
                         ),
-                      ),*/
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -161,22 +145,83 @@ class _StatsScreenState extends State<StatsScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(19),
                         color: Colors.white),
-                    width: width,
-                    height: users.length * 80,
-                    child: ListView.builder(
-                        itemCount: users.length,
-                        itemBuilder: (context, index) {
-                          final analytic = users[index];
-
-                          print(analytic[1]);
-
-                          return _buildRequestItem(
-                              analytic[0]['username'],
-                              analytic[0]['section'],
-                              "+${analytic[1]}",
-                              index + 1);
-                        }),
-                  ),
+                    width: width - 20,
+                    height: width - 40,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            spacing: 8,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: width * 0.18,
+                                height: width - 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFF35394D),
+                                ),
+                              ),
+                              const Text(
+                                "الشهر الحالي",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "font1",
+                                    fontSize: 14,
+                                    color: Color.fromARGB(128, 0, 0, 0)),
+                              )
+                            ],
+                          ),
+                          Column(
+                            spacing: 8,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: width * 0.18,
+                                height: width - 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFF35394D),
+                                ),
+                              ),
+                              const Text(
+                                "الشهر الحالي",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "font1",
+                                    fontSize: 14,
+                                    color: Color.fromARGB(128, 0, 0, 0)),
+                              )
+                            ],
+                          ),
+                          Column(
+                            spacing: 8,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: width * 0.18,
+                                height: width - 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFF35394D),
+                                ),
+                              ),
+                              const Text(
+                                "الشهر الحالي",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "font1",
+                                    fontSize: 14,
+                                    color: Color.fromARGB(128, 0, 0, 0)),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -188,9 +233,9 @@ class _StatsScreenState extends State<StatsScreen> {
 
   final storage = const FlutterSecureStorage();
   Future<void> Get_Reports_Analytics() async {
+    final ip_address = url_api.value;
     if (option == 0) {
       try {
-        final ip_address = url_api.value;
         final url = Uri.parse("http://$ip_address:3666/analytics/users/month");
         final token = await storage.read(key: "jwt");
 

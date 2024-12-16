@@ -6,7 +6,6 @@ import 'package:rjd_app/Screens/widgets/false.dart';
 import 'package:rjd_app/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -17,13 +16,13 @@ class LoginScreen extends StatelessWidget {
     TextEditingController passController = TextEditingController(text: '');
     double width = MediaQuery.of(context).size.width;
 
-    final storage = const FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     Future<void> Login() async {
       if (nameController.text.isNotEmpty && passController.text.isNotEmpty) {
         final password = passController.text;
-
+        final ip_address = url_api.value;
         final response = await http.post(
-          Uri.parse("http://192.168.0.100:3666/login"),
+          Uri.parse("http://$ip_address:3666/login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -68,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                 context,
                 PageTransition(
                     type: PageTransitionType.rightToLeft,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     child: const MyApp()));
           });
           print(await storage.read(key: "jwt"));

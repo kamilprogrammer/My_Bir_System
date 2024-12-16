@@ -8,7 +8,6 @@ import 'package:rjd_app/Screens/widgets/false.dart';
 import 'package:rjd_app/Screens/widgets/true.dart';
 import 'package:rjd_app/main.dart';
 import 'package:http/http.dart' as http;
-import 'package:encrypt/encrypt.dart' as encrypt;
 
 class User extends StatefulWidget {
   const User(
@@ -64,18 +63,17 @@ class _UserState extends State<User> {
     TextEditingController passController =
         TextEditingController(text: widget.pass);
 
-    print(name.value);
-
     Future<void> update_user() async {
       if (nameController.text.isNotEmpty &&
           floorController.text.isNotEmpty &&
           sectionController.text.isNotEmpty &&
           passController.text.isNotEmpty) {
-        final storage = FlutterSecureStorage();
+        final storage = const FlutterSecureStorage();
         final token = await storage.read(key: "jwt");
+        final ip_address = url_api.value;
         final response = await http.put(
           Uri.parse(
-              "http://192.168.0.100:3666/update_user/${widget.User_data['id']}"),
+              "http://$ip_address:3666/update_user/${widget.User_data['id']}"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Access-Control-Allow-Origin": "*",

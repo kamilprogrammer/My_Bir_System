@@ -37,13 +37,13 @@ class _Full_Admin_CardState extends State<Full_Admin_Card> {
                       context,
                       PageTransition(
                           type: PageTransitionType.leftToRight,
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: const Adminhomescreen()));
                 } else {
                   Navigator.push(
                       context,
                       PageTransition(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           type: PageTransitionType.leftToRight,
                           child: const Homescreen()));
                 }
@@ -51,7 +51,7 @@ class _Full_Admin_CardState extends State<Full_Admin_Card> {
             ),
             toolbarHeight: 50.0,
             title: Text(
-              " طلب الصيانة رقم " + (widget.index + 1).toString(),
+              " طلب الصيانة رقم ${widget.index + 1}",
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: 'font1',
@@ -138,12 +138,13 @@ class _Full_Admin_CardState extends State<Full_Admin_Card> {
     );
   }
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   Future<void> Update() async {
+    final ip_address = url_api.value;
     final token = await storage.read(key: "jwt");
     final req = await http.put(
-        Uri.parse("http://192.168.0.100:3666/done/${widget.card['id']}"),
+        Uri.parse("http://$ip_address:3666/done/${widget.card['id']}"),
         headers: {"Authorization": "$token"});
 
     if (req.statusCode == 200) {
@@ -180,9 +181,9 @@ class _Full_Admin_CardState extends State<Full_Admin_Card> {
 
   Future<void> NotYet() async {
     final token = await storage.read(key: "jwt");
-
+    final ip_address = url_api.value;
     final req = await http.put(
-        Uri.parse("http://192.168.0.100:3666/notyet/${widget.card['id']}"),
+        Uri.parse("http://$ip_address:3666/notyet/${widget.card['id']}"),
         headers: {"Authorization": "$token"});
 
     if (req.statusCode == 200) {

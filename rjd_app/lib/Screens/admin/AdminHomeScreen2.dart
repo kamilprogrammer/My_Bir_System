@@ -49,7 +49,7 @@ class _AdminHomeScreen2State extends State<AdminHomeScreen2> {
                       context,
                       PageTransition(
                           type: PageTransitionType.leftToRight,
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: const Adminhomescreen()));
                 },
                 child: Transform.scale(
@@ -277,7 +277,8 @@ class _AdminHomeScreen2State extends State<AdminHomeScreen2> {
   final storage = const FlutterSecureStorage();
 
   Future<void> fetchReports(date, user) async {
-    final url = Uri.parse("http://192.168.0.100:3666/reports/done");
+    final ip_address = url_api.value;
+    final url = Uri.parse("http://$ip_address:3666/reports/done");
     final token = await storage.read(key: "jwt");
     final response = await http.get(
       url,

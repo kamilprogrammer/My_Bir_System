@@ -243,9 +243,10 @@ class _ShareState extends State<ShareWidget> {
 
   Future<void> reload() async {
     try {
-      final storage = FlutterSecureStorage();
+      final ip_address = url_api.value;
+      final storage = const FlutterSecureStorage();
       final token = await storage.read(key: "jwt");
-      final url = Uri.parse("http://192.168.0.100:3666/employees");
+      final url = Uri.parse("http://$ip_address:3666/employees");
       final response2 =
           await http.get(url, headers: {"Authorization": "$token"});
       final body = response2.bodyBytes;
@@ -256,7 +257,7 @@ class _ShareState extends State<ShareWidget> {
       });
 
       final response1 = await http.post(
-          Uri.parse("http://192.168.0.100:3666/report/${widget.report_id}"),
+          Uri.parse("http://$ip_address:3666/report/${widget.report_id}"),
           headers: {"Authorization": "$token"});
       final body1 = jsonDecode(response1.body);
 
@@ -286,7 +287,7 @@ class _ShareState extends State<ShareWidget> {
   /*Future<void> get_done_by_s() async {
     try {
       final url =
-          Uri.parse("http://192.168.0.100:3666/report/${widget.report_id}");
+          Uri.parse("http://$ip_address:3666/report/${widget.report_id}");
       final response = await http.post(url);
       final body = response.bodyBytes;
 
@@ -389,11 +390,12 @@ class _ShareState extends State<ShareWidget> {
       showAlertDialog(context, "هل تريد إلغاء جميع التحويلات ؟")
           .then((bool1) async {
         if (bool1 == true) {
-          final storage = FlutterSecureStorage();
+          final storage = const FlutterSecureStorage();
           final token = await storage.read(key: "jwt");
+          final ip_address = url_api.value;
           final request = await http.put(
               Uri.parse(
-                  "http://192.168.0.100:3666/share/${widget.report_id}/$share1/$share2"),
+                  "http://$ip_address:3666/share/${widget.report_id}/$share1/$share2"),
               headers: {"Authorization": "$token"});
           if (request.statusCode == 200) {
             Navigator.pop(context);
@@ -414,11 +416,12 @@ class _ShareState extends State<ShareWidget> {
         }
       });
     } else {
-      final storage = FlutterSecureStorage();
+      final storage = const FlutterSecureStorage();
       final token = await storage.read(key: "jwt");
+      final ip_address = url_api.value;
       final request = await http.put(
           Uri.parse(
-              "http://192.168.0.100:3666/share/${widget.report_id}/$share1/$share2"),
+              "http://$ip_address:3666/share/${widget.report_id}/$share1/$share2"),
           headers: {"Authorization": "$token"});
 
       if (request.statusCode == 200) {

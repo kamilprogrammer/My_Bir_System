@@ -7,10 +7,9 @@ import 'package:rjd_app/Screens/HomeScreen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:rjd_app/Screens/LoginScreen.dart';
 import 'package:rjd_app/Screens/Register%201.dart';
-import 'package:rjd_app/Screens/admin/AdminHomeScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
-import 'package:rjd_app/Screens/admin/Stats_Users.dart';
+import 'package:rjd_app/Screens/admin/Stats_Reports.dart';
 import 'package:rjd_app/Screens/widgets/Drawer.dart';
 import 'package:rjd_app/Screens/widgets/false.dart';
 
@@ -20,6 +19,7 @@ late final ValueNotifier<String> section;
 late final ValueNotifier<String> floor;
 late final ValueNotifier<String> admin1;
 late final ValueNotifier<String> worker;
+late final ValueNotifier<String> url_api;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +31,7 @@ Future<void> main() async {
   floor = ValueNotifier(localStorage.getItem('floor') ?? '0');
   admin1 = ValueNotifier(localStorage.getItem('admin1') ?? '0');
   worker = ValueNotifier(localStorage.getItem('worker') ?? '0');
+  url_api = ValueNotifier(localStorage.getItem('url_api') ?? '0');
 
   user_id.addListener(() {
     localStorage.setItem('user_id', user_id.value.toString());
@@ -58,6 +59,10 @@ Future<void> main() async {
     localStorage.setItem('worker', worker.value.toString());
     print(worker.value);
   });
+  url_api.addListener(() {
+    localStorage.setItem('url_api', url_api.value.toString());
+    print(url_api.value);
+  });
 
   print(user_id.value);
 
@@ -77,11 +82,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   final storage = const FlutterSecureStorage();
+
   Future<void> updatelocal() async {
     print(await storage.read(key: "jwt"));
     final token = await storage.read(key: "jwt");
     print(token);
-    final url = Uri.parse("http://192.168.0.100:3666/user/${user_id.value}");
+    final ip_address = url_api.value;
+    final url = Uri.parse("http://$ip_address:3666/user/${user_id.value}");
     final response = await http.get(
       url,
       headers: {"Authorization": "$token"},
@@ -92,12 +99,14 @@ class _MyAppState extends State<MyApp> {
           as Map<String, dynamic>;
       final tokenData = jsonDecode(utf8.decode(response.bodyBytes))[1]
           as Map<String, dynamic>;
-
+      url_api.value = "192.168.160.248";
+      print(url_api.value);
       name.value = result['username'];
       section.value = result['section'];
       floor.value = result['floor'].toString();
       admin1.value = result['admin'].toString();
       worker.value = result['worker'].toString();
+
       final token =
           await storage.write(key: "jwt", value: tokenData["access_token"]);
       print(tokenData['access_token']);
@@ -131,7 +140,7 @@ class _MyAppState extends State<MyApp> {
           print(admin1.value);
           if (admin1.value == 'true') {
             return Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const StatsScreen()));
+                MaterialPageRoute(builder: (context) => const StatsReport()));
           } else {
             return Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Homescreen()));
@@ -258,7 +267,7 @@ class _StarterState extends State<Starter> {
                       context,
                       PageTransition(
                           type: PageTransitionType.bottomToTop,
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: const RegisterScreen()));
                 },
                 child: const Text(
@@ -295,7 +304,7 @@ class _StarterState extends State<Starter> {
                       context,
                       PageTransition(
                           type: PageTransitionType.bottomToTop,
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: const LoginScreen()));
                 },
                 child: const Text(

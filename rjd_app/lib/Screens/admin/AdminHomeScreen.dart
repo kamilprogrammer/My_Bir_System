@@ -53,7 +53,7 @@ class _AdminhomescreenState extends State<Adminhomescreen> {
                       context,
                       PageTransition(
                           type: PageTransitionType.rightToLeft,
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: const AdminHomeScreen2()));
                 },
                 child: const Icon(
@@ -254,7 +254,8 @@ class _AdminhomescreenState extends State<Adminhomescreen> {
                                     }
                                   },
                                   child: ConstrainedBox(
-                                    constraints: BoxConstraints(minWidth: 40),
+                                    constraints:
+                                        const BoxConstraints(minWidth: 40),
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
                                       height: 32,
@@ -290,7 +291,7 @@ class _AdminhomescreenState extends State<Adminhomescreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       SizedBox(
@@ -365,7 +366,8 @@ class _AdminhomescreenState extends State<Adminhomescreen> {
   final storage = const FlutterSecureStorage();
 
   Future<void> fetchReports(date, user) async {
-    final url = Uri.parse("http://192.168.0.100:3666/reports");
+    final ip_address = url_api.value;
+    final url = Uri.parse("http://$ip_address:3666/reports");
     final token = await storage.read(key: "jwt");
     final response = await http.get(
       url,
@@ -400,26 +402,27 @@ class _AdminhomescreenState extends State<Adminhomescreen> {
         });
         print(reports);
       } else if (user["id"] != "All" && user['name'] != "All") {
-        List reports_name = reports.where((report) {
+        List reportsName = reports.where((report) {
           return report['name'] == user['name'].toString();
         }).toList();
-        List reports_done1 = reports.where((report) {
+        List reportsDone1 = reports.where((report) {
           return report['done_by'] == user['id'].toString();
         }).toList();
 
-        List reports_done2 = reports.where((report) {
+        List reportsDone2 = reports.where((report) {
           return report['done_by2'] == user['id'].toString();
         }).toList();
         setState(() {
           reports = finalJson;
-          reports = reports_name + reports_done1 + reports_done2;
+          reports = reportsName + reportsDone1 + reportsDone2;
         });
       }
     }
   }
 
   Future<void> fetchEmployees() async {
-    final url = Uri.parse("http://192.168.0.100:3666/employees");
+    final ip_address = url_api.value;
+    final url = Uri.parse("http://$ip_address:3666/employees");
     final token = await storage.read(key: "jwt");
     final response = await http.get(url, headers: {"Authorization": "$token"});
     final body = response.bodyBytes;
